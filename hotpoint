@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>全球地震数据热力图</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="./leaflet-heat.js"></script>
+    <script src="./HeatLayer.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        // 基础地图图层
+        var testData={
+            max:8,
+            data:[
+            {lat:99.11,lng:34.39,count:3.5},
+            {lat:125.45,lng:-6.75,count:5.4},
+            {lat:-76.7,lng:-4.5,count:7.3},
+            {lat:155.95,lng:-7.1,count:5.4},
+            {lat:85.82,lng:41.96,count:3},
+            {lat:104.69,lng:29.65,count:3.3},
+            {lat:142.71,lng:29.02,count:5.5},
+            {lat:174.45,lng:-21.4,count:5.7},
+            {lat:93.4,lng:22.7,count:6.1},
+            {lat:166.35,lng:-10.6,count:6.3},
+            {lat:115.08,lng:37.55,count:2.5},
+            {lat:122.33,lng:24.03,count:4.8},
+            {lat:106.68,lng:26.87,count:4.6},
+            {lat:83.48,lng:41.17,count:3.1},
+            {lat:104.75,lng:28.15,count:2.8},
+            {lat:101.66,lng:22.32,count:2.8},
+            {lat:101.66,lng:22.32,count:2.8},
+            {lat:104.98,lng:28.17,count:3},
+            {lat:112.95,lng:32.62,count:3},
+            {lat:82.73,lng:40.8,count:3.3},
+            {lat:116.4,lng:38.46,count:2.8},
+            {lat:104.79,lng:28.45,count:4.6},
+            {lat:75.31,lng:39.87,count:3.3},
+            {lat:-176.67,lng:-29.28,count:5.7},
+            {lat:101.96,lng:30.16,count:2.9},
+            {lat:83.62,lng:41.29,count:3.1},
+            {lat:77.75,lng:36.18,count:3.1},
+            {lat:104.76,lng:28.15,count:3},
+            {lat:41.9,lng:39.9,count:5.1},
+            {lat:114.33,lng:36.35,count:2},
+            {lat:-90.85,lng:13.6,count:5.5},
+            {lat:153.3,lng:-4.7,count:5.4},
+            {lat:153.71,lng:-5.35,count:6.2},
+            {lat:106.27,lng:38,count:4},
+            {lat:100.53,lng:33.83,count:3.1},
+            {lat:104.75,lng:28.16,count:2.9},
+            {lat:104.96,lng:28.22,count:3.1},
+            {lat:153.5,lng:-4.7,count:5.4},
+            {lat:121.19,lng:33.5,count:5},
+            {lat:122.25,lng:24.8,count:4.7},
+            {lat:101.69,lng:22.31,count:4.6},
+            {lat:101.68,lng:22.31,count:4.8},
+            {lat:96.62,lng:32.94,count:2.4},
+            {lat:93.75,lng:39.39,count:3.9},
+            {lat:51.23,lng:-37.34,count:5.9},
+            {lat:90.42,lng:32.67,count:3.3},
+            {lat:122.02,lng:24.58,count:4.8},
+            {lat:56.11,lng:27.75,count:6.3},
+            {lat:56.11,lng:27.67,count:6.2},
+            {lat:118.98,lng:39.96,count:2.2},
+            {lat:118.98,lng:39.95,count:2.9},
+            {lat:114.92,lng:37.41,count:2.1},
+            {lat:119.8,lng:-21.22,count:5.5},
+            {lat:118.97,lng:39.97,count:2.4},
+            {lat:-177.48,lng:-20.55,count:5.2},
+            {lat:117.6,lng:38.74,count:2.9},
+            {lat:105.09,lng:28.08,count:4.3},
+            {lat:77.61,lng:37.66,count:3.9},
+            {lat:134.25,lng:-4.3,count:5.9},
+            {lat:126.55,lng:23.5,count:6.5},
+            {lat:104.69,lng:29.59,count:3.9},
+            {lat:122.45,lng:23.94,count:4.2},
+            {lat:-86.56,lng:11.27,count:6.3},
+            {lat:-86.65,lng:11.15,count:5.9},
+            {lat:114.6,lng:36.6,count:2.8},
+            {lat:93.79,lng:38.18,count:3.8},
+            {lat:32.05,lng:37.85,count:5},
+            {lat:84.43,lng:37.01,count:3},
+            {lat:83.43,lng:41.14,count:3},
+            {lat:111.07,lng:32.08,count:3},
+            {lat:124.4,lng:-0.25,count:5.9},
+            {lat:89.31,lng:38.33,count:3.1},
+            {lat:87.44,lng:28.73,count:4.2},
+            {lat:118.14,lng:39.51,count:2.4},
+            {lat:83.54,lng:41.24,count:3.1},
+            {lat:129.35,lng:-2.8,count:5.5},
+            {lat:116.83,lng:38.17,count:2.9},
+            {lat:-70,lng:-32.7,count:5.6},
+            {lat:130.7,lng:-7.05,count:5.9},
+            {lat:84.62,lng:33.49,count:3.7},
+            {lat:171.6,lng:-23,count:5.4},
+            {lat:96.7,lng:0.2,count:5.9},
+            {lat:77.26,lng:40.34,count:3.6},
+            {lat:87.95,lng:43.1,count:3.1},
+            {lat:-25.05,lng:-57.85,count:5.9},
+            {lat:102.02,lng:38.62,count:3.2},
+            {lat:-158.8,lng:55,count:5.5},
+            {lat:118.13,lng:39.6,count:2.3},
+            {lat:125.55,lng:-7.55,count:5},
+            {lat:-177.25,lng:-19.55,count:5.3}]
+        };
+        var baseLayer = L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '...',
+            minZoom: 2,
+            maxZoom: 18
+        }
+        );
+        // 热力图配置
+        var cfg = {
+            "radius": 15,
+            "maxOpacity": .8,
+            "scaleRadius": true,
+            "useLocalExtrema": true,
+            latField: 'lat',
+            lngField: 'lng',
+            valueField: 'count',
+        };
+        var heatmapLayer = new L.HeatLayer(cfg);
+        
+        var map = new L.Map('map', {
+            center: new L.LatLng(0, 0),
+            zoom: 2,
+            minZoom: 2,
+            layers: [baseLayer, heatmapLayer]
+        });
+        heatmapLayer.setData(testData);
+    </script>
+</body>
+
+</html>
